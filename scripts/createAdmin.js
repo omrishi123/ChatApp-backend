@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 require('dotenv').config();
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/whatsapp_chat_app';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://omrishi9608:omrishi9608@chatapp-cluster.thog6qs.mongodb.net/?retryWrites=true&w=majority&appName=chatapp-cluster';
 
 async function createAdmin() {
   await mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
