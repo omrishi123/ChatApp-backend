@@ -11,17 +11,14 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: '*', // for testing, allow all. For production, specify your frontend URL.
+  origin: 'https://chat-app-frontend-wheat-three.vercel.app', // for testing, allow all. For production, specify your frontend URL.
   credentials: true
 }));
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [
-      'http://localhost:3000',
-      'http://localhost:5000',
-      'http://192.168.31.199:5000',
-      'https://a9f8-2409-40e5-16d-bd16-d46d-97a-3581-a8ab.ngrok-free.app'
+      'https://chat-app-frontend-wheat-three.vercel.app'
     ],
     methods: ['GET', 'POST'],
     credentials: true
