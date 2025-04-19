@@ -41,11 +41,9 @@ exports.login = async (req, res) => {
     console.log('Login request body:', req.body);
     let user = await User.findOne({ email });
     if (!user) {
-      // Try username if not found by email
       user = await User.findOne({ username: email });
     }
     if (!user) {
-      console.log('No user found for email or username:', email);
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
     if (user.banned) {
@@ -53,7 +51,6 @@ exports.login = async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log('Password mismatch for email or username:', email);
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
     const payload = {
