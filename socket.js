@@ -58,8 +58,12 @@ module.exports = function(io) {
     });
 
     // Message seen
-    socket.on('seenMessage', ({ chatId, messageId, userId }) => {
-      io.to(chatId).emit('messageSeen', { messageId, userId });
+    socket.on('seenMessage', async ({ chatId, messageId, userId }) => {
+      // Mark the message as seen in the database
+      if (messageId) {
+        await Message.findByIdAndUpdate(messageId, { seen: true });
+        io.to(chatId).emit('messageSeen', { messageId, userId });
+      }
     });
   });
 };
