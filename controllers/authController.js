@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
         username: user.username
       }
     };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30d' });
     res.json({ token, user: { id: user._id, username: user.username, email: user.email, profilePic: user.profilePic } });
   } catch (error) {
     console.error('Registration error:', error);
@@ -60,7 +60,7 @@ exports.login = async (req, res) => {
         username: user.username
       }
     };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30d' });
     res.json({ token, user: { id: user._id, username: user.username, email: user.email, profilePic: user.profilePic } });
   } catch (error) {
     console.error('Login error:', error);
