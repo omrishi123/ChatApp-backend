@@ -18,7 +18,16 @@ exports.getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('username profilePic lastSeen online');
     if (!user) return res.status(404).json({ msg: 'User not found' });
-    res.json(user);
+    // Add block info: is the profile user blocked by the current user?
+    let blockedByMe = false;
+    if (req.user && req.user.id) {
+      const me = await User.findById(req.user.id);
+      if (me && me.blockedUsers.includes(user._id)) blockedByMe = true;
+    }
+    res.json({
+      ...user.toObject(),
+      blockedByMe,
+    });
   } catch (err) {
     res.status(500).json({ msg: 'Server error', err });
   }
