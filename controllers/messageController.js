@@ -1,5 +1,6 @@
 const Message = require('../models/Message');
 const Chat = require('../models/Chat');
+const User = require('../models/User'); // assuming User model is in '../models/User'
 
 exports.getMessages = async (req, res) => {
   try {
@@ -21,6 +22,12 @@ exports.sendMessage = async (req, res) => {
     if (req.file) media = `/uploads/${req.file.filename}`;
     const chat = await Chat.findById(chatId);
     if (!chat) return res.status(404).json({ msg: 'Chat not found' });
+    // Block check: prevent sending if receiver has blocked sender or sender has blocked receiver
+    const senderUser = await User.findById(req.user.id);
+    const receiverUser = await User.findById(chat.participants.find(id => id.toString() !== req.user.id));
+    if (senderUser.blockedUsers.includes(receiverUser._id) || receiverUser.blockedUsers.includes(senderUser._id)) {
+      return res.status(403).json({ msg: 'You cannot send messages to this user.' });
+    }
     const receiver = chat.participants.find(id => id.toString() !== req.user.id);
     const message = new Message({
       chat: chatId,
