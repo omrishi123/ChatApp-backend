@@ -6,14 +6,14 @@ const Message = require('../models/Message');
 
 // Find or create the AI bot user
 async function getAIBotUser() {
-  let bot = await User.findOne({ ai_bot: true });
+  let bot = await User.findOne({ email: 'omai@system.bot' });
   if (!bot) {
     bot = new User({
       username: "OM'S AI",
       email: 'omai@system.bot',
       password: 'AIBotPassword123!', // Not used, but required
       ai_bot: true,
-      profilePic: ''
+      profilePic: '/uploads/default-ai-bot.jpg'
     });
     await bot.save();
   }
