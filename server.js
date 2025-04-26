@@ -30,9 +30,11 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 
-// Add Cache-Control for all API responses
+// Add Cache-Control and security headers for all API responses
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store');
+  res.set('X-Content-Type-Options', 'nosniff');
+  res.removeHeader('X-Powered-By');
   next();
 });
 
