@@ -6,7 +6,7 @@ const Message = require('../models/Message');
 
 // Find or create the AI bot user
 async function getAIBotUser() {
-  let bot = await User.findOne({ email: 'omai@system.bot' });
+  let bot = await User.findOne({ email: 'omai@system.bot', ai_bot: true });
   if (!bot) {
     bot = new User({
       username: "OM'S AI",
