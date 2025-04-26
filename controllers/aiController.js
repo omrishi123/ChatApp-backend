@@ -28,7 +28,7 @@ exports.sendAIMessage = async (req, res) => {
 
     // Call Gemini API
     const geminiRes = await axios.post(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+      'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent',
       {
         contents: [{ parts: [{ text }] }]
       },
@@ -63,8 +63,8 @@ exports.sendAIMessage = async (req, res) => {
     await chat.save();
     res.json({ aiReply, chatId: chat._id, aiMsg });
   } catch (err) {
-    console.error('AI ERROR:', err.response?.data || err.message);
-    res.status(500).json({ msg: 'AI error', err: err.response?.data || err.message });
+    console.error('AI ERROR:', err?.response?.data || err?.message || err);
+    res.status(500).json({ msg: 'AI error', err: err?.response?.data || err?.message || String(err) });
   }
 };
 
