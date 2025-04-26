@@ -76,6 +76,6 @@ exports.updateAIBotProfilePic = async (req, res) => {
     await bot.save();
     res.json({ msg: 'AI bot profile updated', profilePic: bot.profilePic });
   } catch (err) {
-    res.status(500).json({ msg: 'Update failed', err });
+    res.status(500).json({ msg: 'AI error', err: err.response?.data || err.message });
   }
 };

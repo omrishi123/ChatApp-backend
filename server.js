@@ -10,16 +10,36 @@ const path = require('path');
 dotenv.config();
 
 const app = express();
+
+const allowedOrigins = [
+  'https://chat-app-frontend-wheat-three.vercel.app',
+  'https://chatapp-backend-production-d9db.up.railway.app',
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: 'https://chat-app-frontend-wheat-three.vercel.app', // for testing, allow all. For production, specify your frontend URL.
-  credentials: true
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
+
+// Add Cache-Control for all API responses
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: [
-      'https://chat-app-frontend-wheat-three.vercel.app'
-    ],
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   }
