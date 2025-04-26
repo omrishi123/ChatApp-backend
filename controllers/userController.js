@@ -52,3 +52,14 @@ exports.unblockUser = async (req, res) => {
     res.status(500).json({ msg: 'Server error', err });
   }
 };
+
+// Get AI bot profile for admin panel
+exports.getAIBotProfile = async (req, res) => {
+  try {
+    const aiBot = await User.findOne({ ai_bot: true });
+    if (!aiBot) return res.status(404).json({ msg: 'AI bot not found' });
+    res.json({ profilePic: aiBot.profilePic });
+  } catch (err) {
+    res.status(500).json({ msg: 'Failed to get AI bot profile', err });
+  }
+};

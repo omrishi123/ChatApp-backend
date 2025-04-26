@@ -11,7 +11,8 @@ const UserSchema = new mongoose.Schema({
   online: { type: Boolean, default: false },
   blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   mutedChats: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }],
-  banned: { type: Boolean, default: false }
+  banned: { type: Boolean, default: false },
+  ai_bot: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);
