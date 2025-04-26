@@ -8,7 +8,7 @@ router.get('/search', auth, userController.searchUsers);
 // Get user profile by ID
 router.get('/:id', auth, userController.getUserProfile);
 // Block user
-router.get('/ai-bot-profile', userController.getAIBotProfile);
+// router.get('/ai-bot-profile', userController.getAIBotProfile);  // Removed AI bot profile route
 // Unblock user
 router.post('/block', auth, userController.blockUser);
 // Unblock user

@@ -63,7 +63,6 @@ app.use('/api/users', require('./routes/user'));
 app.use('/api/chats', require('./routes/chat'));
 app.use('/api/messages', require('./routes/message'));
 app.use('/api/admin', require('./routes/admin'));
-app.use('/api/ai', require('./routes/ai'));
 
 // Serve React static files
 app.use(express.static(path.join(__dirname, '../frontend/build')));
