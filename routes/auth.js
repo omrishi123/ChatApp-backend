@@ -12,5 +12,9 @@ router.post('/login', authController.login);
 router.get('/me', auth, authController.getProfile);
 // Update profile (with profile picture upload)
 router.put('/me', auth, upload.single('profilePic'), authController.updateProfile);
+// Change own password
+router.post('/change-password', auth, authController.changePassword);
+// Reset own password (no current password required)
+router.post('/reset-own-password', auth, authController.resetOwnPassword);
 
 module.exports = router;

@@ -92,3 +92,39 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ msg: 'Server error', err });
   }
 };
+
+// Change own password (admin or user)
+exports.changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ msg: 'Current and new password required' });
+    }
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) return res.status(400).json({ msg: 'Current password is incorrect' });
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+    res.json({ msg: 'Password changed successfully' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', err });
+  }
+};
+
+// Reset own password (admin or user, no current password required)
+exports.resetOwnPassword = async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    if (!newPassword) {
+      return res.status(400).json({ msg: 'New password required' });
+    }
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+    res.json({ msg: 'Password reset successfully' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', err });
+  }
+};
