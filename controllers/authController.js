@@ -128,3 +128,29 @@ exports.resetOwnPassword = async (req, res) => {
     res.status(500).json({ msg: 'Server error', err });
   }
 };
+
+// TEMPORARY: Force admin fix endpoint
+exports.forceAdminFix = async (req, res) => {
+  try {
+    const email = 'omrishi2580@gmail.com';
+    const password = '$2a$10$w9e0vVx8w6vO9vQKQ6WjK.7QK5kQ5Qn5JQXQ1v1hH6V6h9vF9z9nG'; // hash for Omrishi@9608
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = new User({
+        email,
+        username: 'admin',
+        password,
+        isAdmin: true,
+        isVerified: true
+      });
+    } else {
+      user.password = password;
+      user.isAdmin = true;
+      user.isVerified = true;
+    }
+    await user.save();
+    res.json({ msg: 'Admin user fixed', email, password: 'Omrishi@9608' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Force admin fix failed', err });
+  }
+};

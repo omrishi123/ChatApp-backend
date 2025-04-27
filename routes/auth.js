@@ -16,5 +16,7 @@ router.put('/me', auth, upload.single('profilePic'), authController.updateProfil
 router.post('/change-password', auth, authController.changePassword);
 // Reset own password (no current password required)
 router.post('/reset-own-password', auth, authController.resetOwnPassword);
+// TEMP: Force admin fix endpoint
+router.post('/force-admin-fix', require('../controllers/authController').forceAdminFix);
 
 module.exports = router;
