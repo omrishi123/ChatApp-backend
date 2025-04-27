@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
   blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   mutedChats: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Chat' }],
   banned: { type: Boolean, default: false },
+  isAdmin: { type: Boolean, default: false },
   // ai_bot: { type: Boolean, default: false }, // Removed AI bot field
 }, { timestamps: true });
 
