@@ -58,13 +58,11 @@ mongoose.connect(process.env.MONGO_URI, {
 }).then(() => console.log('MongoDB connected'));
 
 // Routes
-const statusRoutes = require('./routes/status');
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/user'));
 app.use('/api/chats', require('./routes/chat'));
 app.use('/api/messages', require('./routes/message'));
 app.use('/api/admin', require('./routes/admin'));
-app.use('/api/status', statusRoutes);
 
 // Serve React static files
 app.use(express.static(path.join(__dirname, '../frontend/build')));
