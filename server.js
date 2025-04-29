@@ -15,7 +15,8 @@ const allowedOrigins = [
   'https://chat-app-frontend-wheat-three.vercel.app',
   'https://chatapp-backend-production-d9db.up.railway.app',
   'capacitor://localhost',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://localhost' // <-- Add this line!
 ];
 
 app.use(cors({
