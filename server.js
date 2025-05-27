@@ -13,19 +13,21 @@ const app = express();
 
 const allowedOrigins = [
   'https://chat-app-frontend-wheat-three.vercel.app',
-  'https://chatapp-backend-production-d9db.up.railway.app',
-  'https://chat-app-backend-pr8c1zmi5-om-rishis-projects.vercel.app/',
+  'https://chat-app-backend-sandy.vercel.app',
   'capacitor://localhost',
   'http://localhost:3000',
-  'https://localhost' // <-- Add this line!
+  'https://localhost',
+  'http://localhost:8080',
+  'http://localhost:8100'
 ];
 
 app.use(cors({
   origin: function(origin, callback) {
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
       return callback(null, true);
     } else {
+      console.log('Blocked by CORS:', origin);
       return callback(new Error('Not allowed by CORS'));
     }
   },
