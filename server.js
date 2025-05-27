@@ -8,6 +8,8 @@ const path = require('path');
 
 // Load env vars
 dotenv.config();
+console.log('Environment:', process.env.NODE_ENV || 'development');
+console.log('MongoDB URI:', process.env.MONGO_URI ? '*** URI is set (hidden for security) ***' : 'MONGO_URI is NOT set');
 
 const app = express();
 
@@ -60,18 +62,37 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000, // Timeout after 5s
-  socketTimeoutMS: 45000, // Close idle connections after 45s
+  serverSelectionTimeoutMS: 5000
 })
-.then(() => console.log('MongoDB connected successfully'))
+.then(() => console.log('✅ MongoDB connected successfully'))
 .catch(err => {
-  console.error('MongoDB connection error:', err.message);
-  // Mask the password in logs for security
-  const maskedUri = process.env.MONGO_URI 
-    ? process.env.MONGO_URI.replace(/(mongodb\+srv:\/\/[^:]+:)([^@]+)(@.+)/, '$1*****$3') 
-    : 'MONGO_URI is NOT set';
-  console.error('Connection string used:', maskedUri);
+  console.error('❌ MongoDB connection error:', err.message);
+  console.error('Error details:', {
+    name: err.name,
+    code: err.code,
+    codeName: err.codeName
+  });
   process.exit(1);
+});
+
+// Test DB connection
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const db = mongoose.connection.db;
+    const collections = await db.listCollections().toArray();
+    res.json({
+      status: 'success',
+      db: {
+        name: db.databaseName,
+        collections: collections.map(c => c.name)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message
+    });
+  }
 });
 
 // Routes
