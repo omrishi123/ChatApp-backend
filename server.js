@@ -56,11 +56,23 @@ const io = new Server(server, {
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// MongoDB connection
+// MongoDB connection with better error handling
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'));
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // Timeout after 5s
+  socketTimeoutMS: 45000, // Close idle connections after 45s
+})
+.then(() => console.log('MongoDB connected successfully'))
+.catch(err => {
+  console.error('MongoDB connection error:', err.message);
+  // Mask the password in logs for security
+  const maskedUri = process.env.MONGO_URI 
+    ? process.env.MONGO_URI.replace(/(mongodb\+srv:\/\/[^:]+:)([^@]+)(@.+)/, '$1*****$3') 
+    : 'MONGO_URI is NOT set';
+  console.error('Connection string used:', maskedUri);
+  process.exit(1);
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
